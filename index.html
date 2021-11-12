@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            font-size: 300%;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+                
+
+    <script>
+        // model
+        var points = 0;
+        var pointsPerClick = 1;
+        var smileyIndex = 0;
+        
+
+
+        // controller
+        function doClick() {
+            points += pointsPerClick;
+            smileyIndex = getNextSmileyIndex(smileyIndex);
+            document.getElementById("pts").innerHTML = pointsPerClick;
+            updateView();
+        }
+
+        function buyUpgrade(upgradeCost) {
+            if (points < upgradeCost) return;
+            points -= upgradeCost;
+            pointsPerClick++;
+            document.getElementById("pts").innerHTML = pointsPerClick;
+            updateView();
+        }
+
+        function buyUpgrade1(upgradeCost) {
+            if (points < upgradeCost) return;
+            points -= upgradeCost;
+            pointsPerClick += 5;
+            document.getElementById("pts").innerHTML = pointsPerClick;
+            updateView();
+        }
+
+        function reset() {
+            if (points < 0) return;
+            points = 0;
+            pointsPerClick = 1;
+            smileyIndex = 0;
+            document.getElementById("pts").innerHTML = pointsPerClick;
+            updateView();
+        }
+
+        function random(upgradeCost) {
+            if (points < upgradeCost) return;
+            points -= upgradeCost;
+            pointsPerClick = pointsPerClick + Math.floor(Math.random() * 30);
+            smileyIndex = 0;
+            document.getElementById("pts").innerHTML = pointsPerClick;
+            updateView();
+        }
+
+
+
+        // view
+        updateView();
+        function updateView() {
+            var smiley = getSmiley(smileyIndex);
+            document.getElementById('app').innerHTML = `
+                <div id="image" onclick="doClick()">${smiley}</div>
+                <div id="pointsInfo">${points}</div>
+                <button onclick="buyUpgrade(10)">Kjøp +1 poeng per klikk (10 poeng)</button>
+                <button onclick="buyUpgrade1(50)">Kjøp +5 poeng per klikk (50 poeng)</button>
+                <button onclick="random(100)">Kjøp tilfeldig 1-30 poeng per klikk (100 poeng)</button>
+                <button onclick="reset()">Start på nytt</button>
+                <div id="pointsperclk">Points per click:</div>
+                <div id="pts">${pointsPerClick}</div>
+                
+            `;
+        }
+
+        // hjelpefunksjoner
+        function getSmiley(aSmileyIndex) {
+            if(aSmileyIndex == 0) return '😀'; 
+            if(aSmileyIndex == 1) return '😁';
+            if(aSmileyIndex == 2) return '😅';
+            if(aSmileyIndex == 3) return '🤑';
+            return '';
+        }
+
+        function getNextSmileyIndex(aSmileyIndex) {
+            const maxSmileyIndex = 3;
+            aSmileyIndex++;
+            if (aSmileyIndex > maxSmileyIndex) {
+                aSmileyIndex = 0;
+            }
+            return aSmileyIndex;
+        }
+
+    </script>
+</body>
+
+</html>
